@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { CommentsController } = require("../controllers");
-const { authMiddleware } = require("../middlewares");
+const { authMiddleware, optionalAuthMiddleware } = require("../middlewares");
 /**
  * @swagger
  * components:
@@ -105,7 +105,7 @@ const { authMiddleware } = require("../middlewares");
  *              description: unknown server error
  */
 
-router.get("/:projectId", authMiddleware, CommentsController.getMany);
+router.get("/:projectId", optionalAuthMiddleware, CommentsController.getMany);
 
 /**
  * @swagger

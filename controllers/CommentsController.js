@@ -7,7 +7,7 @@ module.exports = class commentsController {
     static async getMany(req, res) {
         try {
             if (!ObjectId.isValid(req.params.projectId)) {
-                RequestHandler.throwError(400, "Invalid id")();
+                RequestHandler.throwError(400, "Invalid Project id")();
             }
 
             const validated = await Validator.validateGetOptions(req.query);
