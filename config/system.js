@@ -1,0 +1,23 @@
+module.exports = {
+    LOGGINGLEVEL: process.env.LOGGINGLEVEL,
+    NODE_ENV: process.env.NODE_ENV,
+    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
+    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
+    HANDLE_UNEXPECTED_EXCEPTIONS_IN_LOGGER:
+        process.env.HANDLE_UNEXPECTED_EXCEPTIONS_IN_LOGGER.toLowerCase() ===
+        "true"
+            ? true
+            : false,
+    ACCESS_TOKEN_LIFETIME_IN_SECONDS:
+        parseInt(process.env.ACCESS_TOKEN_LIFETIME_IN_SECONDS) || 3600,
+    REFRESH_TOKEN_LIFETIME_IN_SECONDS:
+        parseInt(process.env.REFRESH_TOKEN_LIFETIME_IN_SECONDS) || 86400,
+    IMAGE_MAX_SIZE: parseInt(process.env.IMAGE_MAX_SIZE) || 2048000,
+    MESSAGEBIRD_API_KEY: process.env.MESSAGEBIRD_API_KEY,
+    PHONE_VERIFICATION_CODE_LIFETIME_IN_SECONDS:
+        parseInt(process.env.PHONE_VERIFICATION_CODE_LIFETIME_IN_SECONDS) ||
+        600,
+    MAX_PROJECT_ATTACHMENTS: parseInt(process.env.MAX_PROJECT_ATTACHMENTS) || 5,
+    NO_OF_PROJECTS_PER_PAGE:
+        parseInt(process.env.NO_OF_PROJECTS_PER_PAGE) || 10,
+};
