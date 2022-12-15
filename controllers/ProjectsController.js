@@ -25,7 +25,10 @@ module.exports = class ProjectsController {
             if (!ObjectId.isValid(req.params.projectId)) {
                 RequestHandler.throwError(400, "Invalid id")();
             }
-            let project = await Project.findById(req.params.projectId);
+            let project = await Project.findOne({
+                _id: req.params.projectId,
+                status: "published",
+            });
             if (!project) {
                 RequestHandler.throwError(
                     404,
@@ -47,13 +50,14 @@ module.exports = class ProjectsController {
     }
 
     static async getMany(req, res) {
+        console.log(req.query);
         Logger.info(
             "get many function in projects controller. fetching the listings ..."
         );
 
         try {
             const validated = await Validator.validateGetOptions(req.query);
-            const options = {};
+            const options = { status: "published" };
 
             if (validated.category || validated.searchString) {
                 options.$and = [];
@@ -88,8 +92,6 @@ module.exports = class ProjectsController {
             let projects = await Project.find(options)
                 .skip(validated.noOfProjectsPerPage * (validated.page - 1))
                 .limit(validated.noOfProjectsPerPage);
-
-            console.log(req.auth);
 
             if (req.auth) {
                 projects = projects.map((project) => {

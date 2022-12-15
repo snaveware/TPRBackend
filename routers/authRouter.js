@@ -95,13 +95,41 @@ const { AuthController } = require("../controllers");
  *                      schema:
  *                          type: object
  *                          properties:
- *                              accessToken:
- *                                  type: string
- *                              refreshToken:
- *                                  type: string
+ *                              tokens:
+ *                                  type: object
+ *                                  properties:
+ *                                      accessToken:
+ *                                          type: string
+ *                                      refreshToken:
+ *                                          type: string
+ *                              userAccount:
+ *                                  type: object
+ *                                  properties:
+ *                                      _id:
+ *                                          type:string
+ *                                      firstName:
+ *                                          type: string
+ *                                      lastName:
+ *                                          type: string
+ *                                      phoneNumber:
+ *                                          type: string
+ *                                      email:
+ *                                          type: string
+ *                                      role:
+ *                                          type: string
+ *                                      status:
+ *                                          type: string
+ *                                      lastLogin:
+ *                                          type: string
+ *                                      createdAt:
+ *                                          type: string
+ *                                      updatedAt:
+ *                                          type: string
+ *                                      profileImageURL:
+ *                                          type: string
  *                          example:
- *                              accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
- *                              refreshToken: xyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5j
+ *                              tokens: {accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c,  refreshToken: xyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5j}
+ *                              userAccount: {firstName: John, lastName: doe, phoneNumber: '254712345678', email: work.evans020@gmail.com, password: '12345678', passwordConfirmation: '12345678', biography: I'm an IT student and TUK, role: "admin", status: "active", lastLogin: "2022-12-08T14:17:02.856Z",createdAt: "2022-12-08T14:17:02.856Z",updatedAt: "2022-12-08T14:17:02.856Z", profileImageURL: "Profile_6391f1de304dc92f34902709.jpg"}
  *          400:
  *              description: Bad request, possibly because of invalid credentials sent to server
  *          403:

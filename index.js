@@ -28,6 +28,7 @@ const {
     projectsRouter,
     commentsRouter,
     filesRouter,
+    userProjectsRouter,
 } = require("./routers");
 const { createRequestId, logRequests } = require("./middlewares");
 const { sysConfig } = require("./config");
@@ -115,6 +116,7 @@ app.use("/auth", authRouter);
 app.use("/projects", projectsRouter);
 app.use("/comments", commentsRouter);
 app.use("/file", filesRouter);
+app.use("/user/projects", userProjectsRouter);
 
 /**
  * Other routes are recorded as 404 and 500
