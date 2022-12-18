@@ -77,7 +77,7 @@ module.exports = class UserProjectsController {
                     ],
                 });
             }
-
+            const count = await Project.countDocuments(options);
             let projects = await Project.find(options)
                 .skip(validated.noOfProjectsPerPage * (validated.page - 1))
                 .limit(validated.noOfProjectsPerPage);
@@ -89,11 +89,12 @@ module.exports = class UserProjectsController {
                     } else {
                         project = { ...project._doc, isLikedByMe: false };
                     }
+
                     return project;
                 });
             }
 
-            RequestHandler.sendSuccess(req.requestId, res, projects);
+            RequestHandler.sendSuccess(req.requestId, res, { count, projects });
         } catch (error) {
             console.log(error);
             RequestHandler.sendError(req.requestId, res, error);

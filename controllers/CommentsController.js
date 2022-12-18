@@ -12,13 +12,17 @@ module.exports = class commentsController {
 
             const validated = await Validator.validateGetOptions(req.query);
 
-            const comments = await Comment.find({
+            const options = {
                 projectId: req.params.projectId,
-            })
+            };
+
+            const count = await Comment.countDocuments({ options });
+
+            const comments = await Comment.find({ options })
                 .skip(validated.noOfCommentsPerPage * (validated.page - 1))
                 .limit(validated.noOfCommentsPerPage);
 
-            RequestHandler.sendSuccess(req.requestId, res, comments);
+            RequestHandler.sendSuccess(req.requestId, res, { count, comments });
         } catch (error) {
             RequestHandler.sendError(req.requestId, res, error);
         }
