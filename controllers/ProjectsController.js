@@ -4,7 +4,8 @@ const { Project } = require("../models");
 const { validateNewProject } = require("../services/projects/Validator");
 const ObjectId = require("mongoose").Types.ObjectId;
 const Logger = require("../Logger");
-
+const multer = require("multer");
+const fs = require("fs");
 const {
     createProjectAttachmentsUploadFunction,
     createProjectAttachmentsUPdateUploadFunction,
@@ -18,7 +19,7 @@ const updateProjectAttachments = createProjectAttachmentsUPdateUploadFunction();
 module.exports = class ProjectsController {
     static async getOne(req, res) {
         Logger.info(
-            "get many function in projects controller. fetching the listings ..."
+            "get many function in projects controller. fetching project ..."
         );
 
         try {
@@ -50,9 +51,8 @@ module.exports = class ProjectsController {
     }
 
     static async getMany(req, res) {
-        console.log(req.query);
         Logger.info(
-            "get many function in projects controller. fetching the listings ..."
+            "get many function in projects controller. fetching projects ..."
         );
 
         try {
@@ -113,14 +113,60 @@ module.exports = class ProjectsController {
 
     static async createOne(req, res) {
         Logger.info(
-            "create one function in projects controller. fetching the listings ..."
+            "create one function in projects controller. creating project ..."
+        );
+
+        try {
+            const validated = await projectValidator.validateNewProject(
+                req.body
+            );
+
+            validated.owner = {
+                id: req.auth._id,
+                name: `${req.auth.firstName} ${req.auth.lastName}`,
+                profileImageURL: req.auth.profileImageURL,
+            };
+
+            const newProject = new Project(validated);
+
+            const createdProject = await newProject.save();
+
+            if (!createdProject) {
+                RequestHandler.throwError(500, "failed to create project")();
+            }
+            RequestHandler.sendSuccess(req.requestId, res, createdProject);
+        } catch (error) {
+            console.error(error);
+            RequestHandler.sendError(req.requestId, res, error);
+        }
+    }
+
+    static async createProjectAttachments(req, res) {
+        Logger.info(
+            "create one function in projects controller. creating project attachments ..."
         );
 
         uploadProjectAttachments(req, res, async (error) => {
             try {
-                const validated = await projectValidator.validateNewProject(
-                    req.body
-                );
+                if (!ObjectId.isValid(req.params.projectId)) {
+                    RequestHandler.throwError(400, "Invalid id")();
+                }
+
+                const project = await Project.findById(req.params.projectId);
+
+                if (!project) {
+                    RequestHandler.throwError(
+                        404,
+                        "The Project You are trying to update could not be found"
+                    )();
+                }
+
+                if (req.auth._id != project.owner.id) {
+                    RequestHandler.throwError(
+                        403,
+                        "You Do Not have the Permission to Perform the Action you Requested"
+                    )();
+                }
 
                 if (error) {
                     const err = new Error(error);
@@ -128,25 +174,19 @@ module.exports = class ProjectsController {
                     return RequestHandler.sendError(req.requestId, res, err);
                 }
 
-                validated.owner = {
-                    id: req.auth._id,
-                    name: `${req.auth.firstName} ${req.auth.lastName}`,
-                    profileImage: req.auth.profileImage,
-                };
-
-                console.log(req.files);
-
                 if (req.files && req.files.length > 0) {
-                    validated.attachments = req.files.map((file) => {
+                    project.attachments = req.files.map((file) => {
                         return file.filename;
                     });
                 }
 
-                const newProject = new Project(validated);
+                await project.save();
 
-                const createdProject = await newProject.save();
-
-                RequestHandler.sendSuccess(req.requestId, res, createdProject);
+                RequestHandler.sendSuccess(
+                    req.requestId,
+                    res,
+                    project.attachments
+                );
             } catch (error) {
                 console.error(error);
                 RequestHandler.sendError(req.requestId, res, error);
@@ -156,7 +196,7 @@ module.exports = class ProjectsController {
 
     static async updateOne(req, res) {
         Logger.info(
-            "create one function in projects controller. fetching the listings ..."
+            "create one function in projects controller. updating project ..."
         );
 
         updateProjectAttachments(req, res, async (error) => {
@@ -201,11 +241,20 @@ module.exports = class ProjectsController {
                             );
                         }
                     );
+
+                    validated.attachmentsToRemove.map((attachment) => {
+                        const pathToFile = `${global.appRoot}/${attachment}`;
+                        if (fs.existsSync(pathToFile)) {
+                            fs.unlinkSync(pathToFile);
+                        }
+                    });
                 }
 
                 if (req.files && req.files.length > 0) {
                     req.files.map((file) => {
-                        project.attachments.push(file.filename);
+                        if (project.attachments.indexOf(file.filename) == -1) {
+                            project.attachments.push(file.filename);
+                        }
                     });
                 }
 

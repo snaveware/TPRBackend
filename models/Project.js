@@ -11,7 +11,7 @@ const projectSchema = new Schema({
     owner: {
         name: { type: String, required: true },
         id: { type: String, required: true },
-        profileImage: { type: String },
+        profileImageURL: { type: String },
     },
     likes: {
         type: [{ type: String }],

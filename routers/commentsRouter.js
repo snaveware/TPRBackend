@@ -53,7 +53,7 @@ const { authMiddleware, optionalAuthMiddleware } = require("../middlewares");
  *          example:
  *              _id: 63833ac4b4b890da38d704b2
  *              projectId: 63833ac4b4b890da38d704b2
- *              commenter: {name: Evans Munene, id: 63833ac4b4b890da38d704b2, profileImage: https://images.xyz/image1}
+ *              commenter: {name: Evans Munene, id: 63833ac4b4b890da38d704b2, profileImageURL: https://images.xyz/image1}
  *              createdAt: 2022-11-27T10:49:33.215+00:00
  */
 

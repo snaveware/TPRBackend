@@ -27,6 +27,7 @@ module.exports = class FilesController {
     static async addProfileImage(req, res) {
         Logger.info("add profile image in files controller...");
         const filename = req.params.filename;
+        console.log("req body", req.body);
 
         uploadProfileImage(req, res, async (error) => {
             try {
@@ -36,9 +37,16 @@ module.exports = class FilesController {
                     return RequestHandler.sendError(req.requestId, res, err);
                 }
 
+                console.log("file", req.file);
+                console.log("other", req.body);
+
+                if (!req.file) {
+                    RequestHandler.throwError(400, "File not Provided")();
+                }
+
                 const updation = await Account.updateOne(
                     { _id: req.auth._id },
-                    { profileImage: req.file.filename }
+                    { profileImageURL: req.file.filename }
                 );
 
                 if (!updation.acknowledged) {
@@ -54,6 +62,7 @@ module.exports = class FilesController {
                     "Profile Uploaded Successfully"
                 );
             } catch (error) {
+                console.log(error);
                 RequestHandler.sendError(req.requestId, res, error);
             }
         });

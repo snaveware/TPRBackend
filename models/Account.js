@@ -66,7 +66,7 @@ const accountSchema = new Schema({
         default: "active",
         enum: ["active"],
     },
-    profileImage: {
+    profileImageURL: {
         type: String,
     },
     lastLogin: {

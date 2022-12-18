@@ -48,22 +48,28 @@ const { ProjectsController } = require("../controllers");
  *              description: 
  *                  type: string
  *                  description: A detailed description of the project
+ *          example:
+ *              title: IOT Weather Reporting System using Adruino and Raspberry Pi
+ *              category: IOT
+ *              contactPhoneNumber: "254712345678"
+ *              contactEmail: info@snaveware.com
+ *              status: published
+ *              link: https://snaveware.com
+ *              summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+ *              description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+ *      ProjectAttachments:
+ *          type: object
+ *          required:
+ *              -attachments
+ *          properties:
  *              attachments:
  *                  type: array
  *                  maxItems: 5
  *                  items:
  *                      type: string
  *                      format: binary
-
  *          example:
- *              title: IOT Weather Reporting System using Adruino and Raspberry Pi
- *              category: IOT
- *              contactPhoneNumber: 254712345678
- *              contactEmail: info@snaveware.com
- *              status: published
- *              link: https://snaveware.com
- *              summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
- *              description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+ *              attachments: [attachment1.png,attachment2.docx,attachment3.pdf]
  *      UserDefinedProjectUpdate:
  *          type: object
  *          properties:
@@ -107,7 +113,7 @@ const { ProjectsController } = require("../controllers");
  *          example:
  *              title: IOT Weather Reporting System using Adruino and Raspberry Pi
  *              category: IOT
- *              contactPhoneNumber: 254712345678
+ *              contactPhoneNumber: "254712345678"
  *              contactEmail: info@snaveware.com
  *              status: published
  *      CompleteSystemProject:
@@ -194,7 +200,7 @@ const { ProjectsController } = require("../controllers");
  *              _id: 63833ac4b4b890da38d704b2
  *              title: IOT Weather Reporting System using Adruino and Raspberry Pi
  *              category: IOT
- *              contactPhoneNumber: 254712345678
+ *              contactPhoneNumber: "254712345678"
  *              contactEmail: info@snaveware.com
  *              status: published
  *              noOfLikes: 10
@@ -319,7 +325,7 @@ router.get("/:projectId", optionalAuthMiddleware, ProjectsController.getOne);
  *          description: Project Properties
  *          required: true
  *          content:
- *              multipart/form-data:
+ *              application/json:
  *                  schema:
  *                      $ref: '#/components/schemas/UserDefinedProject'
  *      responses:
@@ -337,6 +343,47 @@ router.get("/:projectId", optionalAuthMiddleware, ProjectsController.getOne);
  *              description: unknown server error
  */
 router.post("/", authMiddleware, ProjectsController.createOne);
+
+/**
+ * @swagger
+ * /projects/attachments/{projectId}:
+ *  post:
+ *      security:
+ *         - bearerAuth: []
+ *      summary: Receives some changes about project and updates the project
+ *      tags: [Projects]
+ *      requestBody:
+ *          description: Project Properties
+ *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema:
+ *                      $ref: '#/components/schemas/ProjectAttachments'
+ *      parameters:
+ *        - in: path
+ *          name: projectId
+ *          description: The ID of the project to update
+ *          schema:
+ *              type: string
+ *      responses:
+ *          200:
+ *              description: Project update successful
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/ProjectAttachments'
+ *          400:
+ *              description: Bad request, possibly because of invalid project information
+ *          403:
+ *              description: forbidden, not logged in or does not have permissions to create project
+ *          500:
+ *              description: unknown server error
+ */
+router.post(
+    "/attachments/:projectId",
+    authMiddleware,
+    ProjectsController.createProjectAttachments
+);
 
 /**
  * @swagger

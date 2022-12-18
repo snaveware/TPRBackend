@@ -43,7 +43,7 @@ module.exports = class commentsController {
             validated.commenter = {
                 id: req.auth.id,
                 name: `${req.auth.firstName} ${req.auth.lastName}`,
-                profileImage: req.auth.profileImage,
+                profileImageURL: req.auth.profileImageURL,
             };
 
             validated.projectId = req.params.projectId;

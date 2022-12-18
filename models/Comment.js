@@ -4,7 +4,7 @@ const commentSchema = new Schema({
     commenter: {
         id: { type: String, required: true },
         name: { type: String, required: true },
-        profileImage: { type: String },
+        profileImageURL: { type: String },
     },
     projectId: {
         type: String,
