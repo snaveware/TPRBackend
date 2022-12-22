@@ -56,11 +56,9 @@ module.exports = class FilesController {
                     )();
                 }
 
-                RequestHandler.sendSuccess(
-                    req.requestId,
-                    res,
-                    "Profile Uploaded Successfully"
-                );
+                RequestHandler.sendSuccess(req.requestId, res, {
+                    profileImageURL: req.file.filename,
+                });
             } catch (error) {
                 console.log(error);
                 RequestHandler.sendError(req.requestId, res, error);

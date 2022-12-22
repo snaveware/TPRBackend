@@ -76,6 +76,16 @@ module.exports = class ProjectsController {
                             },
                         },
                         {
+                            title: {
+                                $regex: new RegExp(validated.searchString, "i"),
+                            },
+                        },
+                        {
+                            "owner.name": {
+                                $regex: new RegExp(validated.searchString, "i"),
+                            },
+                        },
+                        {
                             summary: {
                                 $regex: new RegExp(validated.searchString, "i"),
                             },
@@ -93,7 +103,8 @@ module.exports = class ProjectsController {
 
             let projects = await Project.find(options)
                 .skip(validated.noOfProjectsPerPage * (validated.page - 1))
-                .limit(validated.noOfProjectsPerPage);
+                .limit(validated.noOfProjectsPerPage)
+                .sort([["_id", "desc"]]);
 
             if (req.auth) {
                 projects = projects.map((project) => {
@@ -245,9 +256,11 @@ module.exports = class ProjectsController {
                     );
 
                     validated.attachmentsToRemove.map((attachment) => {
-                        const pathToFile = `${global.appRoot}/${attachment}`;
-                        if (fs.existsSync(pathToFile)) {
-                            fs.unlinkSync(pathToFile);
+                        if (attachment) {
+                            const pathToFile = `${global.appRoot}/${attachment}`;
+                            if (fs.existsSync(pathToFile)) {
+                                fs.unlinkSync(pathToFile);
+                            }
                         }
                     });
                 }
@@ -344,8 +357,6 @@ module.exports = class ProjectsController {
         try {
             const project = await Project.findById(req.params.projectId);
 
-            console.log("project--------", project);
-
             if (!project) {
                 RequestHandler.throwError(
                     404,
@@ -354,11 +365,9 @@ module.exports = class ProjectsController {
             }
 
             if (project.likes.indexOf(req.auth._id) == -1) {
-                RequestHandler.sendSuccess(
-                    req.requestId,
-                    res,
-                    "Unliked Successfully"
-                );
+                RequestHandler.sendSuccess(req.requestId, res, {
+                    noOfLikes: project.noOfLikes,
+                });
 
                 return;
             }

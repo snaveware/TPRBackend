@@ -5,7 +5,7 @@ module.exports = {
     DB_CONNECTION_STRING: process.env.DB_CONNECTION_STRING,
     ADMIN: {
         accessLevel: adminPermissions.accessLevel,
-        firstName: "Admin",
+        firstName: "Root",
         lastName: "Admin",
         role: "admin",
         status: "active",

@@ -36,7 +36,7 @@ const projectSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        enum: ["engineering", "software", "IOT", "business", "Art"],
+        enum: ["Engineering", "Software", "IOT", "Business", "Art", "Other"],
     },
     contactPhoneNumber: {
         type: String,

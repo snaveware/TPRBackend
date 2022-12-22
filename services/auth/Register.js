@@ -14,7 +14,7 @@ module.exports = class Register {
             email: Joi.string().email(),
             password: Joi.string().min(8).required(),
             passwordConfirmation: Joi.ref("password"),
-            biography: Joi.string(),
+            biography: Joi.string().empty(""),
         });
     }
 

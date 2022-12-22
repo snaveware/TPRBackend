@@ -65,6 +65,16 @@ module.exports = class UserProjectsController {
                             },
                         },
                         {
+                            title: {
+                                $regex: new RegExp(validated.searchString, "i"),
+                            },
+                        },
+                        {
+                            "owner.name": {
+                                $regex: new RegExp(validated.searchString, "i"),
+                            },
+                        },
+                        {
                             summary: {
                                 $regex: new RegExp(validated.searchString, "i"),
                             },
@@ -80,7 +90,8 @@ module.exports = class UserProjectsController {
             const count = await Project.countDocuments(options);
             let projects = await Project.find(options)
                 .skip(validated.noOfProjectsPerPage * (validated.page - 1))
-                .limit(validated.noOfProjectsPerPage);
+                .limit(validated.noOfProjectsPerPage)
+                .sort([["_id", "desc"]]);
 
             if (req.auth) {
                 projects = projects.map((project) => {

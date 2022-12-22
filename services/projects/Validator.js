@@ -6,7 +6,14 @@ module.exports = class Validator {
         const schema = Joi.object({
             title: Joi.string().max(100).min(1).required(),
             category: Joi.string()
-                .valid("engineering", "software", "IOT", "business", "art")
+                .valid(
+                    "Engineering",
+                    "Software",
+                    "IOT",
+                    "Business",
+                    "Art",
+                    "Other"
+                )
                 .required(),
             contactPhoneNumber: Joi.string().min(12).max(12).required(),
             contactEmail: Joi.string().min(1).max(255).required(),
@@ -32,7 +39,14 @@ module.exports = class Validator {
         const schema = Joi.object({
             title: Joi.string().max(100).min(1).empty(""),
             category: Joi.string()
-                .valid("engineering", "software", "IOT", "business", "art")
+                .valid(
+                    "Engineering",
+                    "Software",
+                    "IOT",
+                    "Business",
+                    "Art",
+                    "Other"
+                )
                 .empty(""),
             contactPhoneNumber: Joi.string().min(12).max(12).empty(""),
             contactEmail: Joi.string().min(1).max(255).empty(""),
@@ -78,7 +92,14 @@ module.exports = class Validator {
                 .empty(""),
             page: Joi.number().integer().min(1).empty(""),
             category: Joi.string()
-                .valid("engineering", "software", "IOT", "business", "art")
+                .valid(
+                    "Engineering",
+                    "Software",
+                    "IOT",
+                    "Business",
+                    "Art",
+                    "Other"
+                )
                 .empty(""),
         });
 

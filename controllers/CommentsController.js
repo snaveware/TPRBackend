@@ -12,13 +12,14 @@ module.exports = class commentsController {
 
             const validated = await Validator.validateGetOptions(req.query);
 
+            console.log("project id: ", req.params.projectId);
             const options = {
                 projectId: req.params.projectId,
             };
 
-            const count = await Comment.countDocuments({ options });
+            const count = await Comment.countDocuments(options);
 
-            const comments = await Comment.find({ options })
+            const comments = await Comment.find(options)
                 .skip(validated.noOfCommentsPerPage * (validated.page - 1))
                 .limit(validated.noOfCommentsPerPage);
 
