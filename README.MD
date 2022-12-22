@@ -6,16 +6,8 @@
 
 The api Documentation is created using [**Swagger**](https://swagger.io/docs/specification/about/ "swagger allows developers to create dynamic api documentations")
 
-#### Availabe Functionality
+The documentation are in _/docs_ or [http://tprbackend.snaveware.com/docs](http://tprbackend.snaveware.com/docs "The development/testing live server")
 
-### Essentially, everything except payments and sending emails
+### Or
 
--   User Authentication/Authorization
--   Password Recovery
-
-Please follow the documentation to test the api and implement frontend
-
-**In case of any unexpected errors**
-Forward the error message or a screenshot of the error so that I can check it out.
-
-The documentation are in _/docs_ or [http://tpr.snaveware.com/docs](http://TUKRepoProject.snaveware.com/docs "The development/testing live server")
+The documentation are in _/docs_ or [tprbackend-production.up.railway.app](tprbackend-production.up.railway.app "The development/testing live server")
